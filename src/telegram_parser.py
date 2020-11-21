@@ -32,8 +32,6 @@ def getTelegramPhraseCounts(message_history):
             emoji_count = updateCounts(
                 getEmojiCount(message_phrase), phrase_counts[sender_name].emoji_count
             )
-        elif message_object["type"] == "service":  # for calls and stuff
-            continue
         else:
             continue
 

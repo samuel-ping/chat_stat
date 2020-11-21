@@ -1,3 +1,5 @@
+NUM_TOP_PHRASES = 10
+
 STOPWORDS = [
     "i",
     "me",
