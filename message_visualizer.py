@@ -5,11 +5,44 @@ import regex
 import emoji
 
 
+class PhraseCounts:
+    def __init__(self):
+        self.word_count = {}
+        self.emoji_count = {}
+
+
+def getPhraseCounts(data):
+    """
+    returns dictionary of number of times every phrase or emoji was used in messaging history
+    :param data: JSON of message history
+    """
+    phrase_counts = PhraseCounts()
+
+    word_count = {}  # number of times every word was used in message history
+    emoji_count = {}  # number of times every emoji was used in message history
+
+    # processing each individual message
+    for message_object in data["messages"]:
+        messages = message_object["text"]
+
+        message_phrases = processWords(messages)
+
+        # get emoji count from current message and add those on to total emoji count
+        emoji_count = updateCounts(getEmojiCount(message_phrases), emoji_count)
+
+    phrase_counts.emoji_count = emoji_count
+    return phrase_counts
+
+
 def processWords(message_phrases):
     """
     removes punctuation and lowercases all words in list
     :param message_phrases: list of strings
     """
+
+    # turns each message into list of words
+    message_phrases = message_phrases.split(" ")
+
     message_phrases = [
         word.lower().strip(string.punctuation) for word in message_phrases
     ]  # turns all words lowercase, removes punctuation
@@ -17,7 +50,11 @@ def processWords(message_phrases):
     return message_phrases
 
 
-def filterEmojis(message_phrases):
+def removeEmojis(text):
+    return emoji.get_emoji_regexp().sub(r"", text.decode("utf8"))
+
+
+def getEmojiCount(message_phrases):
     """
     returns dict of number of times each emoji is used from all strings in list
     :param message_phrases: list of list of strings
@@ -65,21 +102,9 @@ def getTopPhrases(phrase_count):
 
 
 if __name__ == "__main__":
-    file = open("data/test-result.json")
+    file = open("data/telegram-results.json")
     data = json.load(file)
 
-    phrase_count = {}  # number of times every word/emoji was used in message history
-    emoji_count = {}  # number of times every emoji was used in message history
+    phrase_counts = getPhraseCounts(data)
 
-    # processing each individual message
-    for message_object in data["messages"]:
-        messages = message_object["text"]
-
-        message_phrases = messages.split(" ")  # turns each message into list of words
-
-        message_phrases = processWords(message_phrases)
-        # print(message_phrases)
-        emoji_count = updateCounts(filterEmojis(message_phrases), emoji_count)
-
-    # emoji_count.pop("\uFE0F")
-    print(emoji_count)
+    print(phrase_counts.emoji_count)
