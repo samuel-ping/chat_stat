@@ -25,23 +25,39 @@ def filterEmojis(message_phrases):
     emoji_count = {}
 
     for word in message_phrases:
-        # splits string into list of single letters/emojis
-        letter_list = emoji.get_emoji_regexp().split(word)
+        for letter in word:
+            # splits string into list of single letters/emojis
+            letter_list = emoji.get_emoji_regexp().split(letter)
 
-        # removes trailing and leading empty strings from emoji lists
-        while "" in letter_list:
-            letter_list.remove("")
+            # removes trailing and leading empty strings from emoji lists
+            while "" in letter_list:
+                letter_list.remove("")
+            letter = letter_list[0]
 
-        letter = letter_list[0]
-        # print(letter)
-
-        # increments count for this emoji in dict
-        if letter in emoji_count:
-            emoji_count[letter] = emoji_count.get(letter) + 1
-        else:
-            emoji_count[letter] = 1
+            # checks if letter is emoji
+            if re.match(r"[\W]", letter):
+                # increments count for this emoji in dict
+                if letter in emoji_count:
+                    emoji_count[letter] = emoji_count.get(letter) + 1
+                else:
+                    emoji_count[letter] = 1
 
     return emoji_count
+
+
+def updateCounts(temp_dict, updated_dict):
+    """
+    updates updated_dict with temp_dict's values
+    :param temp_dict: dictionary to add to updated_dict
+    :param updated_dict: dictionary that will be combined with temp_dict's values
+    """
+    for phrase in temp_dict:
+        if phrase in updated_dict:
+            updated_dict[phrase] = updated_dict[phrase] + temp_dict[phrase]
+        else:
+            updated_dict[phrase] = temp_dict[phrase]
+
+    return updated_dict
 
 
 # returns list of top 5 words in dictionary phrase_count
@@ -66,6 +82,8 @@ if __name__ == "__main__":
         message_phrases = messages.split(" ")  # turns each message into list of words
 
         message_phrases = processWords(message_phrases)
-        emoji_count.update(filterEmojis(message_phrases))
+        # print(message_phrases)
+        emoji_count = updateCounts(filterEmojis(message_phrases), emoji_count)
 
+    # emoji_count.pop("\uFE0F")
     print(emoji_count)
