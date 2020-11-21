@@ -8,14 +8,15 @@ import emoji
 
 class PhraseCounts:
     def __init__(self):
-        self.word_count = {}
-        self.emoji_count = {}
+        self.word_count = {}  # number of times each word was used
+        self.emoji_count = {}  # number of times each emoji was used
+        self.total_messages = 0  # total number of messages sent
 
 
-def getPhraseCounts(data):
+def getPhraseCounts(message_history):
     """
     returns dictionary of number of times every phrase or emoji was used in messaging history
-    :param data: JSON of message history
+    :param message_history: JSON of message history
     """
     phrase_counts = PhraseCounts()
 
@@ -23,7 +24,7 @@ def getPhraseCounts(data):
     emoji_count = {}  # number of times every emoji was used in message history
 
     # processing each individual message
-    for message_object in data["messages"]:
+    for message_object in message_history["messages"]:
         message = message_object["text"]
 
         message_phrase = processWords(message)
@@ -72,7 +73,7 @@ def removeEmojis(phrase):
 def cleanDictionary(input_dict):
     """
     removes empty and stopword keys from dictionary
-    :param dict: dictionary
+    :param input_dict: dictionary
     """
     input_dict = removeEmptyKeys(input_dict)
     input_dict = removeStopwords(input_dict)
@@ -80,13 +81,13 @@ def cleanDictionary(input_dict):
     return input_dict
 
 
-def removeEmptyKeys(dict):
+def removeEmptyKeys(input_dict):
     """
     trims empty keys from dictionary
     :param dict: dictionary which needs empty keys to be removed
     """
     new_dict = {}
-    for key, value in dict.items():
+    for key, value in input_dict.items():
         if key != "":
             new_dict[key] = value
 
@@ -96,7 +97,7 @@ def removeEmptyKeys(dict):
 def removeStopwords(input_dict):
     """
     removes stopword keys from dictionary
-    :param dict: dictionary
+    :param input_dict: dictionary
     """
     for stopword in STOPWORDS:
         if stopword in input_dict.keys():
@@ -173,7 +174,7 @@ def getTopPhrases(phrase_count):
 
 if __name__ == "__main__":
     with open("data/telegram-results.json") as message_history_file:
-        data = json.load(message_history_file)
+        message_history = json.load(message_history_file)
 
     # loading stopwords into global "constant" list
     global STOPWORDS
@@ -186,7 +187,7 @@ if __name__ == "__main__":
             STOPWORDS.append(line.strip())
 
     print("Parsing messages...")
-    phrase_counts = getPhraseCounts(data)
+    phrase_counts = getPhraseCounts(message_history)
 
     print("Analyzing messages...")
     top_phrases = getTopPhrases(phrase_counts.word_count)
