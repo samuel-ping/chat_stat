@@ -1,6 +1,6 @@
 import json
 import string
-import re
+import regex
 
 import emoji
 
@@ -24,23 +24,17 @@ def filterEmojis(message_phrases):
     """
     emoji_count = {}
 
-    for word in message_phrases:
-        for letter in word:
-            # splits string into list of single letters/emojis
-            letter_list = emoji.get_emoji_regexp().split(letter)
+    for phrase in message_phrases:
+        # groups unicode for emojis that use multiple unicode sequences
+        words = regex.findall(r"\X", phrase)
 
-            # removes trailing and leading empty strings from emoji lists
-            while "" in letter_list:
-                letter_list.remove("")
-            letter = letter_list[0]
-
-            # checks if letter is emoji
-            if re.match(r"[\W]", letter):
+        for word in words:
+            if any(char in emoji.UNICODE_EMOJI for char in word):
                 # increments count for this emoji in dict
-                if letter in emoji_count:
-                    emoji_count[letter] = emoji_count.get(letter) + 1
+                if word in emoji_count:
+                    emoji_count[word] = emoji_count.get(word) + 1
                 else:
-                    emoji_count[letter] = 1
+                    emoji_count[word] = 1
 
     return emoji_count
 
@@ -64,12 +58,14 @@ def updateCounts(temp_dict, updated_dict):
 def getTopPhrases(phrase_count):
     top_phrases = []
     index = 0
+
     # sort phrase_count
+
     # get top 5 phrases from phrase_count
 
 
 if __name__ == "__main__":
-    file = open("data/telegram-results.json")
+    file = open("data/test-result.json")
     data = json.load(file)
 
     phrase_count = {}  # number of times every word/emoji was used in message history
