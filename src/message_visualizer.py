@@ -137,7 +137,7 @@ def removeStopwords(input_dict):
     :param input_dict: dictionary
     """
     for stopword in STOPWORDS:
-        if stopword in input_dict.keys():  # REMOVE .keys()
+        if stopword in input_dict:
             input_dict.pop(stopword)
 
     return input_dict

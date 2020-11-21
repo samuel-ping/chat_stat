@@ -1,0 +1,47 @@
+{
+  "name": "Bartholomew",
+  "type": "personal_chat",
+  "id": 4845427100,
+  "messages": [
+    {
+      "id": 64676,
+      "type": "message",
+      "date": "2018-11-08T20:29:39",
+      "from": "Samuel",
+      "from_id": 215374548,
+      "text": "Hey Bartholomew! How's it going? We haven't talked since high school. How's school tennis going? How's everything going?"
+    },
+    {
+      "id": 64845,
+      "type": "message",
+      "date": "2018-11-09T16:54:20",
+      "from": "Bartholomew",
+      "from_id": 215374548,
+      "text": "Yooooo we haven't talked in so longg ⌛ I'm doing great! College tennis is going well, I haven't conditioned this much in a while tho, lol. You want to play tennis sometime? 🎾👀"
+    },
+    {
+      "id": 66722,
+      "type": "message",
+      "date": "2018-11-15T18:07:48",
+      "from": "Samuel",
+      "from_id": 550459804,
+      "text": "😍😍❤️❤️"
+    },
+    {
+      "id": 66723,
+      "type": "message",
+      "date": "2018-11-15T18:10:41",
+      "from": "Samuel",
+      "from_id": 215374548,
+      "text": "Heck yeah 😎😎😎 How does 2pm at the courts across from high school sound? Man I haven't been there in a minute"
+    },
+    {
+      "id": 66724,
+      "type": "message",
+      "date": "2018-11-15T18:10:47",
+      "from": "Bartholomew",
+      "from_id": 215374548,
+      "text": "Yeah 👌 I'm down. See you then!👋👋"
+    }
+  ]
+}

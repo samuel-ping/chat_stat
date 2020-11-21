@@ -1,4 +1,6 @@
-data
+*.json
+!*.example
+
 venv
 
 .vscode
