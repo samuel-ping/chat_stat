@@ -27,9 +27,12 @@ def getPhraseCounts(data):
 
         message_phrases = processWords(messages)
 
+        # get word count from current message and add those on to total word count
+        word_count = updateCounts(getWordCount(message_phrases), word_count)
         # get emoji count from current message and add those on to total emoji count
         emoji_count = updateCounts(getEmojiCount(message_phrases), emoji_count)
 
+    phrase_counts.word_count = word_count
     phrase_counts.emoji_count = emoji_count
     return phrase_counts
 
@@ -50,8 +53,32 @@ def processWords(message_phrases):
     return message_phrases
 
 
-def removeEmojis(text):
-    return emoji.get_emoji_regexp().sub(r"", text.decode("utf8"))
+def removeEmojis(phrase):
+    """
+    removes all emojis from string
+    :param
+    """
+    # replaces all emoji unicode with empty string
+    return emoji.get_emoji_regexp().sub(r"", phrase)
+
+
+def getWordCount(message_phrases):
+    """
+    returns dict of number of times each word is used from all strings in list
+    :param message_phrases: list of list of strings
+    """
+    word_count = {}
+
+    for phrase in message_phrases:
+        word = removeEmojis(phrase)
+
+        # increments count for this emoji in dict
+        if word in word_count:
+            word_count[word] = word_count.get(word) + 1
+        else:
+            word_count[word] = 1
+
+    return word_count
 
 
 def getEmojiCount(message_phrases):
@@ -107,4 +134,5 @@ if __name__ == "__main__":
 
     phrase_counts = getPhraseCounts(data)
 
-    print(phrase_counts.emoji_count)
+    # print(phrase_counts.word_count)
+    # print(phrase_counts.emoji_count)
