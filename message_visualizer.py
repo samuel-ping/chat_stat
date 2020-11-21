@@ -8,37 +8,74 @@ import emoji
 
 class PhraseCounts:
     def __init__(self):
+        self.name = ""
         self.word_count = {}  # number of times each word was used
         self.emoji_count = {}  # number of times each emoji was used
         self.total_messages = 0  # total number of messages sent
 
+        self.top_words = []  # top words
+        self.top_emojis = []  # top emojis
 
-def getPhraseCounts(message_history):
+    def processTopNPhrases(self, num):
+        """
+        sets list of top N phrases in PhraseCount() object
+        :param num: int of number of top phrases to get
+        """
+        self.top_words = dict(Counter(self.word_count).most_common(num))
+        self.top_emojis = dict(Counter(self.emoji_count).most_common(num))
+
+    def __str__(self):
+        output = ""
+        print(self.name, "'s Top Phrases:")
+        print("-------------------------------------------------------")
+        print(self.top_words)
+        print(self.top_emojis)
+        return output
+
+
+def getTelegramPhraseCounts(message_history):
     """
-    returns dictionary of number of times every phrase or emoji was used in messaging history
-    :param message_history: JSON of message history
+    returns dictionary of people mapped to a PhraseCounts() object
+    :param message_history: JSON of Telegram message history
     """
-    phrase_counts = PhraseCounts()
+    phrase_counts = {}
 
-    word_count = {}  # number of times every word was used in message history
-    emoji_count = {}  # number of times every emoji was used in message history
-
+    word_count = {}  # number of times every word was used in message
+    emoji_count = {}  # number of times every emoji was used in message
     # processing each individual message
     for message_object in message_history["messages"]:
-        message = message_object["text"]
+        if message_object["type"] == "message":
+            sender_name = message_object["from"]
+            message = message_object["text"]
 
-        message_phrase = processWords(message)
+            # initializes new PhraseCounts() object for new person in chat
+            if sender_name not in phrase_counts:
+                phrase_counts[sender_name] = PhraseCounts()
+                phrase_counts[sender_name].name = sender_name
 
-        # get word count from current message and add those on to total word count
-        word_count = updateCounts(getWordCount(message_phrase), word_count)
-        # get emoji count from current message and add those on to total emoji count
-        emoji_count = updateCounts(getEmojiCount(message_phrase), emoji_count)
+            message_phrase = processWords(message)
 
-    word_count = cleanDictionary(word_count)
-    emoji_count = removeEmptyKeys(emoji_count)
+            # get word count from current message and add those on to total word count
+            word_count = updateCounts(
+                getWordCount(message_phrase), phrase_counts[sender_name].word_count
+            )
+            # get emoji count from current message and add those on to total emoji count
+            emoji_count = updateCounts(
+                getEmojiCount(message_phrase), phrase_counts[sender_name].emoji_count
+            )
+        elif message_object["type"] == "service":  # for calls and stuff
+            continue
+        else:
+            continue
 
-    phrase_counts.word_count = word_count
-    phrase_counts.emoji_count = emoji_count
+    # clean up phrase counts for every person
+    for sender_name in phrase_counts:
+        phrase_counts[sender_name].word_count = cleanDictionary(
+            phrase_counts[sender_name].word_count
+        )
+        phrase_counts[sender_name].emoji_count = removeEmptyKeys(
+            phrase_counts[sender_name].emoji_count
+        )
 
     return phrase_counts
 
@@ -100,7 +137,7 @@ def removeStopwords(input_dict):
     :param input_dict: dictionary
     """
     for stopword in STOPWORDS:
-        if stopword in input_dict.keys():
+        if stopword in input_dict.keys():  # REMOVE .keys()
             input_dict.pop(stopword)
 
     return input_dict
@@ -162,14 +199,20 @@ def updateCounts(temp_dict, updated_dict):
     return updated_dict
 
 
-def getTopPhrases(phrase_count):
+def processTopPhrases(phrase_counts, num):
     """
-    returns list of top 5 phrases in input dictionary
-    :param phrase_count: dictionary of phrase counts
+    iterates through dictionary and sets all top phrases
+    :param phrase_counts: dictionary with strings mapping to PhraseCount() object
+    :param num: int for number phrases
     """
-    top_phrases = dict(Counter(phrase_count).most_common(5))
+    for name in phrase_counts:
+        phrase_counts[name].processTopNPhrases(num)
+    return phrase_counts
 
-    return top_phrases
+
+def printTopPhrases(phrase_counts):
+    for name in phrase_counts:
+        print(phrase_counts[name])
 
 
 if __name__ == "__main__":
@@ -181,16 +224,15 @@ if __name__ == "__main__":
     STOPWORDS = []
     with open(
         "nltk_english_stopwords"
-    ) as stopwords_file:  # stopwords taken from http://nltk.org/nltk_data/, "70. Stopwords Corpus" on 11/18/2020
+    ) as stopwords_file:  # stopwords retrieved from http://nltk.org/nltk_data/, "70. Stopwords Corpus" on 11/18/2020
         stopwords_lines = stopwords_file.readlines()
         for line in stopwords_lines:
             STOPWORDS.append(line.strip())
 
     print("Parsing messages...")
-    phrase_counts = getPhraseCounts(message_history)
+    phrase_counts = getTelegramPhraseCounts(message_history)
 
     print("Analyzing messages...")
-    top_phrases = getTopPhrases(phrase_counts.word_count)
-    print(top_phrases)
-    top_emojis = getTopPhrases(phrase_counts.emoji_count)
-    print(top_emojis)
+    phrase_counts = processTopPhrases(phrase_counts, 10)
+
+    printTopPhrases(phrase_counts)
