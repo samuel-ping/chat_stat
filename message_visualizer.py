@@ -33,7 +33,7 @@ def getPhraseCounts(data):
         # get emoji count from current message and add those on to total emoji count
         emoji_count = updateCounts(getEmojiCount(message_phrase), emoji_count)
 
-    word_count = removeEmptyKeys(word_count)
+    word_count = cleanDictionary(word_count)
     emoji_count = removeEmptyKeys(emoji_count)
 
     phrase_counts.word_count = word_count
@@ -69,6 +69,17 @@ def removeEmojis(phrase):
     return emoji.get_emoji_regexp().sub(r"", phrase)
 
 
+def cleanDictionary(input_dict):
+    """
+    removes empty and stopword keys from dictionary
+    :param dict: dictionary
+    """
+    input_dict = removeEmptyKeys(input_dict)
+    input_dict = removeStopwords(input_dict)
+
+    return input_dict
+
+
 def removeEmptyKeys(dict):
     """
     trims empty keys from dictionary
@@ -80,6 +91,18 @@ def removeEmptyKeys(dict):
             new_dict[key] = value
 
     return new_dict
+
+
+def removeStopwords(input_dict):
+    """
+    removes stopword keys from dictionary
+    :param dict: dictionary
+    """
+    for stopword in STOPWORDS:
+        if stopword in input_dict.keys():
+            input_dict.pop(stopword)
+
+    return input_dict
 
 
 def getWordCount(message_phrases):
@@ -149,8 +172,18 @@ def getTopPhrases(phrase_count):
 
 
 if __name__ == "__main__":
-    file = open("data/telegram-results.json")
-    data = json.load(file)
+    with open("data/telegram-results.json") as message_history_file:
+        data = json.load(message_history_file)
+
+    # loading stopwords into global "constant" list
+    global STOPWORDS
+    STOPWORDS = []
+    with open(
+        "nltk_english_stopwords"
+    ) as stopwords_file:  # stopwords taken from http://nltk.org/nltk_data/, "70. Stopwords Corpus" on 11/18/2020
+        stopwords_lines = stopwords_file.readlines()
+        for line in stopwords_lines:
+            STOPWORDS.append(line.strip())
 
     print("Parsing messages...")
     phrase_counts = getPhraseCounts(data)
