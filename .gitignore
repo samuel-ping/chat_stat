@@ -1,6 +1,11 @@
+# Config files
+config.py
+
+# Data files
 *.json
-!*.example
 
+# Python cache
+__pycache__
+
+# Virtual environment
 venv
-
-.vscode
