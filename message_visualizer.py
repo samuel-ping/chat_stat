@@ -1,6 +1,7 @@
 import json
 import string
 import regex
+from collections import Counter
 
 import emoji
 
@@ -32,8 +33,12 @@ def getPhraseCounts(data):
         # get emoji count from current message and add those on to total emoji count
         emoji_count = updateCounts(getEmojiCount(message_phrases), emoji_count)
 
+    word_count = removeEmptyKeys(word_count)
+    emoji_count = removeEmptyKeys(emoji_count)
+
     phrase_counts.word_count = word_count
     phrase_counts.emoji_count = emoji_count
+
     return phrase_counts
 
 
@@ -56,10 +61,23 @@ def processWords(message_phrases):
 def removeEmojis(phrase):
     """
     removes all emojis from string
-    :param
+    :param phrase: a string
     """
     # replaces all emoji unicode with empty string
     return emoji.get_emoji_regexp().sub(r"", phrase)
+
+
+def removeEmptyKeys(dict):
+    """
+    trims empty keys from dictionary
+    :param dict: dictionary which needs empty keys to be removed
+    """
+    new_dict = {}
+    for key, value in dict.items():
+        if key != "":
+            new_dict[key] = value
+
+    return new_dict
 
 
 def getWordCount(message_phrases):
@@ -118,14 +136,33 @@ def updateCounts(temp_dict, updated_dict):
     return updated_dict
 
 
-# returns list of top 5 words in dictionary phrase_count
 def getTopPhrases(phrase_count):
-    top_phrases = []
-    index = 0
+    """
+    returns list of top 5 phrases in input dictionary
+    :param phrase_count: dictionary of phrase counts
+    """
+    # top_phrases = []
+    # index = 0
 
-    # sort phrase_count
+    # for phrase in phrase_count:
+    #     if len(top_phrases) == 0:
+    #         top_phrases.append(phrase)
+    #     else:
+    #         for top_phrase in top_phrases:
+    #             if phrase_count.get(top_phrase) < phrase_count.get(phrase):
+    #                 temp = top_phrase
+    #                 top_phrases[index] = phrase
+    #                 index = index + 1
 
-    # get top 5 phrases from phrase_count
+    #                 while index < 5 and len(top_phrases < index):
+    #                     top_phrases[index] = temp
+    #                     temp = top_phrases[index]
+    #                     index = index + 1
+    #     index = 0
+
+    top_phrases = dict(Counter(phrase_count).most_common(5))
+
+    return top_phrases
 
 
 if __name__ == "__main__":
@@ -133,6 +170,10 @@ if __name__ == "__main__":
     data = json.load(file)
 
     phrase_counts = getPhraseCounts(data)
+    top_phrases = getTopPhrases(phrase_counts.word_count)
+    print(top_phrases)
+    top_emojis = getTopPhrases(phrase_counts.emoji_count)
+    print(top_emojis)
 
     # print(phrase_counts.word_count)
-    # print(phrase_counts.emoji_count)
+    # print (phrase_counts.emoji_count)
