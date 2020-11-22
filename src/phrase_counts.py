@@ -3,6 +3,7 @@ from collections import Counter
 import emoji
 import regex
 
+import config
 from data_processing import removeEmojis
 
 
@@ -12,6 +13,7 @@ class PhraseCounts:
         self.word_count = {}  # number of times each word was used
         self.emoji_count = {}  # number of times each emoji was used
         self.total_messages = 0  # total number of messages sent
+        self.profanity_count = 0  # total number of profane words
 
         self.top_words = []  # top words
         self.top_emojis = []  # top emojis
@@ -69,7 +71,7 @@ def getWordCount(message_phrases):
     for phrase in message_phrases:
         word = removeEmojis(phrase)
 
-        # increments count for this emoji in dict
+        # increments count for this word in dict
         if word in word_count:
             word_count[word] = word_count.get(word) + 1
         else:
@@ -98,6 +100,24 @@ def getEmojiCount(message_phrases):
                     emoji_count[word] = 1
 
     return emoji_count
+
+
+def getProfanityCount(message_phrases):
+    """
+    returns dict of number of times each word is used from all strings in list
+    :param message_phrases: list of list of strings
+    """
+    profanity_count = 0
+
+    for phrase in message_phrases:
+        word = removeEmojis(phrase)
+
+        # increments count for this emoji in dict
+        for profane_word in config.PROFANE_WORDS:
+            if word == profane_word:
+                profanity_count = profanity_count + 1
+
+    return profanity_count
 
 
 def combinePhraseCounts(temp_dict, updated_dict):

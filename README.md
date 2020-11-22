@@ -2,6 +2,8 @@
 
 ## Usage
 
+Output HTML file will be found in output/
+
 ```bash
 $ python src/core.py <messaging service> <path to message history file> <(Optional) additional paths to message history files...>
 ```

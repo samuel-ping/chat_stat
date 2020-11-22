@@ -44,3 +44,4 @@ if __name__ == "__main__":
     phrase_counts = sortPhrases(phrase_counts)
     # generateBarChart(phrase_counts["Samuel Ping"].getTopNWords(config.NUM_TOP_PHRASES))
     generatePieChart(phrase_counts["Samuel Ping"].getTopNWords(config.NUM_TOP_PHRASES))
+    print(phrase_counts["Samuel Ping"].profanity_count)
