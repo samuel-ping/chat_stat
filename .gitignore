@@ -5,7 +5,7 @@ config.py
 *.json
 
 # HTML output files
-output.html
+*.html
 
 # Python cache
 __pycache__

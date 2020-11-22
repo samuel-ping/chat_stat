@@ -1,6 +1,8 @@
 import sys
 import json
 
+# from bs4 import BeautifulSoup
+
 import config
 from telegram_parser import getTelegramPhraseCounts
 from messenger_parser import getMessengerPhraseCounts
@@ -42,9 +44,9 @@ if __name__ == "__main__":
 
     print("Analyzing messages...")
     phrase_counts = sortPhrases(phrase_counts)
-    # generateBarChart(phrase_counts["Samuel Ping"].getTopNWords(config.NUM_TOP_PHRASES))
-    # generatePieChart(phrase_counts["Samuel"].getTopNWords(config.NUM_TOP_PHRASES))
-    # print(phrase_counts["Samuel"].profanity_count)
+    generateBarChart(phrase_counts["Samuel"].getTopNWords(config.NUM_TOP_PHRASES))
+    generatePieChart(phrase_counts["Samuel"].getTopNWords(config.NUM_TOP_PHRASES))
+    print("Profanity Count: " + str(phrase_counts["Samuel"].profanity_count))
 
     # create HTML file
     file_counter = 2
@@ -61,8 +63,18 @@ if __name__ == "__main__":
 
     html_outline = """<html>
                         <head></head>
-                        <body><p>Hello World!</p></body>
+                        <body>
+                            <p>Hello World!</p>
+                            <div id="charts"></div>
+                        </body>
                     </html>"""
-    output_file_writer.write(html_outline)
 
-    output_file_writer.close()
+    soup = BeautifulSoup(html_outline, "html.parser")
+
+    for sender in phrase_counts:
+        soup.div.append(
+            generateBarChart(phrase_counts[sender].getTopNWords(config.NUM_TOP_PHRASES))
+        )
+
+    # output_file_writer.write(html_outline)
+    # output_file_writer.close()

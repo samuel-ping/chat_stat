@@ -8,8 +8,11 @@ def generateBarChart(data):
     :param data: list of tuples
     """
     data_frame = pd.DataFrame(data, columns=["Word", "Number of Times Used"])
-    bar_chart = px.bar(data_frame, x="Word", y="Number of Times Used")
-    return bar_chart.to_html(full_html=False)
+    bar_chart = px.bar(
+        data_frame, x="Word", y="Number of Times Used", title="Top 10 Words Used"
+    )
+    # return bar_chart.to_html(full_html=False)
+    bar_chart.write_html("output/bar.html")
 
 
 def generatePieChart(data):
@@ -24,4 +27,5 @@ def generatePieChart(data):
         names="Word",
         title="Top 10 Words Used",
     )
-    return pie_chart.to_html(full_html=False)
+    # return pie_chart.to_html(full_html=False)
+    pie_chart.write_html("output/pie.html")
