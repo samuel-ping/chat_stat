@@ -43,5 +43,26 @@ if __name__ == "__main__":
     print("Analyzing messages...")
     phrase_counts = sortPhrases(phrase_counts)
     # generateBarChart(phrase_counts["Samuel Ping"].getTopNWords(config.NUM_TOP_PHRASES))
-    generatePieChart(phrase_counts["Samuel Ping"].getTopNWords(config.NUM_TOP_PHRASES))
-    print(phrase_counts["Samuel Ping"].profanity_count)
+    # generatePieChart(phrase_counts["Samuel"].getTopNWords(config.NUM_TOP_PHRASES))
+    # print(phrase_counts["Samuel"].profanity_count)
+
+    # create HTML file
+    file_counter = 2
+    file_name = "output/output.html"
+    file_found = True
+    while file_found:
+        try:
+            output_file = open(file_name)
+        except:
+            output_file_writer = open(file_name, "w")
+            file_found = False
+        file_name = "output/output" + str(file_counter) + ".html"
+        file_counter = file_counter + 1
+
+    html_outline = """<html>
+                        <head></head>
+                        <body><p>Hello World!</p></body>
+                    </html>"""
+    output_file_writer.write(html_outline)
+
+    output_file_writer.close()

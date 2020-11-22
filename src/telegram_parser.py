@@ -1,4 +1,10 @@
-from phrase_counts import PhraseCounts, updateCounts, getWordCount, getEmojiCount
+from phrase_counts import (
+    PhraseCounts,
+    updateCounts,
+    getWordCount,
+    getEmojiCount,
+    getProfanityCount,
+)
 from data_processing import processWords, cleanDictionary, removeEmptyKeys
 
 
@@ -31,6 +37,12 @@ def getTelegramPhraseCounts(message_history):
             # get emoji count from current message and add those on to total emoji count
             emoji_count = updateCounts(
                 getEmojiCount(message_phrase), phrase_counts[sender_name].emoji_count
+            )
+
+            # update profanity count
+            profanity_count = getProfanityCount(message_phrase)
+            phrase_counts[sender_name].profanity_count = (
+                phrase_counts[sender_name].profanity_count + profanity_count
             )
 
             # increment total number of messages
