@@ -1,7 +1,7 @@
 from collections import Counter
 
-import regex
 import emoji
+import regex
 
 from data_processing import removeEmojis
 
@@ -16,13 +16,28 @@ class PhraseCounts:
         self.top_words = []  # top words
         self.top_emojis = []  # top emojis
 
-    def processTopNPhrases(self, num):
+    def processTopPhrases(self):
         """
-        sets list of top N phrases in PhraseCount() object
+        sorts all words from most used to least used into a list
+        converts dict with word count to a Counter to use its most_common() function, which returns a list of tuples
         :param num: int of number of top phrases to get
         """
-        self.top_words = dict(Counter(self.word_count).most_common(num))
-        self.top_emojis = dict(Counter(self.emoji_count).most_common(num))
+        self.top_words = Counter(self.word_count).most_common(len(self.word_count))
+        self.top_emojis = Counter(self.emoji_count).most_common(len(self.emoji_count))
+
+    def getTopNWords(self, num):
+        """
+        returns list of top n most used words
+        :param num: number of words to return in list
+        """
+        return self.top_words[:num]
+
+    def getTopNEmojis(self, num):
+        """
+        returns list of top n most used emojis
+        :param num: number of emojis to return in list
+        """
+        return self.top_emojis[:num]
 
     def __str__(self):
         print(self.name + "'s Top Phrases:")
@@ -33,14 +48,14 @@ class PhraseCounts:
         return ""
 
 
-def processTopPhrases(phrase_counts, num):
+def sortPhrases(phrase_counts):
     """
     iterates through dictionary and sets all top phrases
     :param phrase_counts: dictionary with strings mapping to PhraseCount() object
     :param num: int for number phrases
     """
     for name in phrase_counts:
-        phrase_counts[name].processTopNPhrases(num)
+        phrase_counts[name].processTopPhrases()
     return phrase_counts
 
 
@@ -101,7 +116,7 @@ def combinePhraseCounts(temp_dict, updated_dict):
                 temp_dict[name].emoji_count, updated_dict[name].emoji_count
             )
         else:
-            updated_dict[name] = PhraseCounts(name)  # yay I don't have to manage memory
+            updated_dict[name] = PhraseCounts(name)  # *flashbacks to memory management*
             updated_dict[name].word_count = temp_dict[name].word_count
             updated_dict[name].emoji_count = temp_dict[name].emoji_count
 

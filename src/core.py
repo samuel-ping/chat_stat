@@ -4,12 +4,18 @@ import json
 import config
 from telegram_parser import getTelegramPhraseCounts
 from messenger_parser import getMessengerPhraseCounts
-from phrase_counts import combinePhraseCounts, processTopPhrases, printTopPhrases
+from phrase_counts import combinePhraseCounts, sortPhrases, printTopPhrases
 from data_processing import normalizeMessengerData
+from chart_processing import generateBarChart, generatePieChart
 
 
 if __name__ == "__main__":
     message_service = sys.argv[1]  # get messaging service from command line
+
+    if message_service != "T" and message_service != "M":
+        print("Don't forget to specify which messaging service you're parsing!")
+        print("Usage: python core.py <message service> <message history file(s)>")
+        exit()
 
     phrase_counts = {}
 
@@ -35,6 +41,6 @@ if __name__ == "__main__":
         index = index + 1
 
     print("Analyzing messages...")
-    phrase_counts = processTopPhrases(phrase_counts, config.NUM_TOP_PHRASES)
-
-    printTopPhrases(phrase_counts)
+    phrase_counts = sortPhrases(phrase_counts)
+    # generateBarChart(phrase_counts["Samuel Ping"].getTopNWords(config.NUM_TOP_PHRASES))
+    generatePieChart(phrase_counts["Samuel Ping"].getTopNWords(config.NUM_TOP_PHRASES))

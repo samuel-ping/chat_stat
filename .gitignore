@@ -4,6 +4,9 @@ config.py
 # Data files
 *.json
 
+# HTML output files
+output.html
+
 # Python cache
 __pycache__
 
