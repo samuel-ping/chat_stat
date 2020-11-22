@@ -1,3 +1,4 @@
+import json
 import string
 
 import emoji
@@ -23,13 +24,24 @@ def processWords(message_phrases):
     return message_phrases
 
 
-def removeEmojis(phrase):
+def normalizeMessengerData(message_history):
     """
-    removes all emojis from string
-    :param phrase: a string
+    recursively decodes Facebook Messenger chat history JSON, which when currently downloaded, is incorrectly formatted.
+    code based on https://stackoverflow.com/a/62160255/13026376
+    :param message_history: JSON dict
     """
-    # replaces all emoji unicode with empty string
-    return emoji.get_emoji_regexp().sub(r"", phrase)
+    if isinstance(message_history, str):
+        return message_history.encode("latin_1").decode("utf-8")
+
+    if isinstance(message_history, list):
+        return [normalizeMessengerData(message) for message in message_history]
+
+    if isinstance(message_history, dict):
+        return {
+            key: normalizeMessengerData(item) for key, item in message_history.items()
+        }
+
+    return message_history
 
 
 def cleanDictionary(input_dict):
@@ -41,6 +53,15 @@ def cleanDictionary(input_dict):
     input_dict = removeStopwords(input_dict)
 
     return input_dict
+
+
+def removeEmojis(phrase):
+    """
+    removes all emojis from string
+    :param phrase: a string
+    """
+    # replaces all emoji unicode with empty string
+    return emoji.get_emoji_regexp().sub(r"", phrase)
 
 
 def removeEmptyKeys(input_dict):

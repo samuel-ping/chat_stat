@@ -1,0 +1,34 @@
+{
+  "participants": [
+    {
+      "name": "Barthomolew"
+    },
+    {
+      "name": "Samuel Ping"
+    }
+  ],
+  "messages": [
+    {
+      "sender_name": "Samuel Ping",
+      "timestamp_ms": 1601132854970,
+      "content": "Hey Bartholomew! How's it going?",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Samuel Ping",
+      "timestamp_ms": 1601131519581,
+      "content": "Bb",
+      "type": "We haven't talked since high school. How's school tennis going? How's everything going?"
+    },
+    {
+      "sender_name": "Emma Mattio-Smith",
+      "timestamp_ms": 1593705859751,
+      "content": "Yooooo we haven't talked in so longg ⌛ I'm doing great! College tennis is going well, I haven't conditioned this much in a while tho, lol. You want to play tennis sometime? 🎾👀",
+      "type": "Generic"
+    }
+  ],
+  "title": "Barthomolew",
+  "is_still_participant": true,
+  "thread_type": "Regular",
+  "thread_path": "inbox/Barthomolew_h1zZfqrQhf"
+}

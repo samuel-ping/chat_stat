@@ -2,10 +2,10 @@ from phrase_counts import PhraseCounts, updateCounts, getWordCount, getEmojiCoun
 from data_processing import processWords, cleanDictionary, removeEmptyKeys
 
 
-def getTelegramPhraseCounts(message_history):
+def getMessengerPhraseCounts(message_history):
     """
     returns dictionary of people mapped to a PhraseCounts() object
-    :param message_history: JSON of Telegram message history
+    :param message_history: JSON of Facebook Messenger message history
     """
     phrase_counts = {}
 
@@ -14,9 +14,13 @@ def getTelegramPhraseCounts(message_history):
 
     # processing each individual message
     for message_object in message_history["messages"]:
-        if message_object["type"] == "message":
-            sender_name = message_object["from"]
-            message = message_object["text"]
+        if message_object["type"] == "Generic":
+            sender_name = message_object["sender_name"]
+
+            try:
+                message = message_object["content"]
+            except KeyError:
+                pass
 
             # initializes new PhraseCounts() object for new person in chat
             if sender_name not in phrase_counts:

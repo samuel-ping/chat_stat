@@ -7,8 +7,8 @@ from data_processing import removeEmojis
 
 
 class PhraseCounts:
-    def __init__(self):
-        self.name = ""
+    def __init__(self, name):
+        self.name = name
         self.word_count = {}  # number of times each word was used
         self.emoji_count = {}  # number of times each emoji was used
         self.total_messages = 0  # total number of messages sent
@@ -25,12 +25,12 @@ class PhraseCounts:
         self.top_emojis = dict(Counter(self.emoji_count).most_common(num))
 
     def __str__(self):
-        output = ""
         print(self.name + "'s Top Phrases:")
         print("-------------------------------------------------------")
         print(self.top_words)
         print(self.top_emojis)
-        return output
+        print("Total Messages:", self.total_messages)
+        return ""
 
 
 def processTopPhrases(phrase_counts, num):
@@ -85,6 +85,34 @@ def getEmojiCount(message_phrases):
     return emoji_count
 
 
+def combinePhraseCounts(temp_dict, updated_dict):
+    """
+    combines temp_dict into updated_dict.
+    :param temp_dict: dict of strings matching to PhaseCount()s to merge into updated_dict
+    :param updated_dict: dict of strings matching to PhaseCount()s
+    """
+    for name in temp_dict:
+        # update counts of words and emojis
+        if name in updated_dict:
+            updated_dict[name].word_count = updateCounts(
+                temp_dict[name].word_count, updated_dict[name].word_count
+            )
+            updated_dict[name].emoji_count = updateCounts(
+                temp_dict[name].emoji_count, updated_dict[name].emoji_count
+            )
+        else:
+            updated_dict[name] = PhraseCounts(name)  # yay I don't have to manage memory
+            updated_dict[name].word_count = temp_dict[name].word_count
+            updated_dict[name].emoji_count = temp_dict[name].emoji_count
+
+        # update total number of messages
+        updated_dict[name].total_messages = (
+            updated_dict[name].total_messages + temp_dict[name].total_messages
+        )
+
+    return updated_dict
+
+
 def updateCounts(temp_dict, updated_dict):
     """
     updates updated_dict with temp_dict's values
@@ -101,5 +129,9 @@ def updateCounts(temp_dict, updated_dict):
 
 
 def printTopPhrases(phrase_counts):
+    """
+    prints out all of the top messages sent by everybody
+    :param phrase_counts: dictionary of strings matching to PhraseCount() objects
+    """
     for name in phrase_counts:
         print(phrase_counts[name])
