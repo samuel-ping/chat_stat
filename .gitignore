@@ -1,14 +1,17 @@
+# Frontend
+node_modules/
+
+# Python Backend
 # Config files
 config.py
-
 # Data files
-*.json
-
-# HTML output files
-*.html
-
+backend/data/*.json
+# HTML output files 
+backend/output/*.html
 # Python cache
 __pycache__
-
 # Virtual environment
 venv
+
+# VSCode
+.vscode/
