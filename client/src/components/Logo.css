@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "KGHappy";
+  src: url("../fonts/KGHAPPY.ttf") format("truetype");
+}
+
+.logo-wrapper {
+  font-family: "KGHappy";
+  font-size: 5rem;
+  color: crimson;
+  width: 50%;
+  /* text-align: center; */
+
+  /* chat bubble */
+  position: relative;
+  background: #fff9c4;
+  border-radius: 0.4em;
+}
+
+/* chat bubble nib */
+.logo-wrapper:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  border: 0.3em solid transparent;
+  border-top-color: #fff9c4;
+  border-bottom: 0;
+  border-left: 0;
+  margin-left: -0.14em;
+  margin-bottom: -0.28em;
+}
+
+.typing-effect {
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0 auto;
+
+  animation: text-animation 1s linear 1s 1 normal both;
+}
+
+@keyframes text-animation {
+  from {
+    width: 0;
+  }
+  to {
+    width: 50%;
+  }
+}
+
+.blinking-cursor {
+  border-right: solid 3px #000000;
+  animation: cursor-blink 950ms linear infinite;
+}
+
+@keyframes cursor-blink {
+  0% {
+    border-right-color: #000000;
+  }
+  49.9% {
+    border-right-color: #000000;
+  }
+  50.1% {
+    border-right-color: transparent;
+  }
+  100% {
+    border-right-color: transparent;
+  }
+}

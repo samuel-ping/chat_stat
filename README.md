@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/samuel-ping/chat_stat/blob/development/screenshots/chat_stat-header.png?raw=true">
+</p>
+
 # chat_stat
 
 ## Usage
