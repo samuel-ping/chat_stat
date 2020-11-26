@@ -2,8 +2,6 @@
 
 ## name_changer.py
 
-NOTE: Not working with Telegram files at the moment. Temporary workaround: change names in Messenger to their name in Telegram.
-
 This tool changes the names of a person in your message history file. This is useful for normalizing names between multiple conversations. NOTE: If you're trying to modify a name with whitespaces, use double quotes ("") around that name in the command line so it registers as a single argument.
 
 ### Usage

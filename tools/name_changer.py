@@ -40,7 +40,7 @@ if __name__ == "__main__":
             # for Telegram chat histories
             try:
                 if message_object["from"] == old_name:
-                    message_object["from"] == new_name
+                    message_object["from"] = new_name
             except KeyError:
                 pass
 
