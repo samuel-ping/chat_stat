@@ -5,25 +5,19 @@
 Output HTML file will be found in output/
 
 ```bash
-$ python src/core.py <messaging service> <path to message history file> <(Optional) additional paths to message history files...>
+$ python src/core.py <path to message history file> <(Optional) additional paths to message history files...>
 ```
 
-Example for opening Telegram file:
+Example for parsing single file:
 
 ```bash
-$ python src/core.py T data/result.json
+$ python src/core.py
 ```
 
-Example for opening Messenger file:
+You can parse multiple files, as well as files from different messaging services:
 
 ```bash
-$ python src/core.py M data/message-1.json
-```
-
-You can parse multiple files:
-
-```bash
-$ python src/core.py M data/message-1.json data/message-2.json
+$ python src/core.py M data/message-1.json data/message-2.json data/result.json
 ```
 
 ## Installation

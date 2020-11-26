@@ -41,6 +41,13 @@ class PhraseCounts:
         """
         return self.top_emojis[:num]
 
+    def getNumberOfTimesSent(self, phrase):
+        """
+        returns int of number of times sent phrase in a message
+        :param phrase: string
+        """
+        return self.word_count[phrase]
+
     def __str__(self):
         print(self.name + "'s Top Phrases:")
         print("-------------------------------------------------------")
