@@ -5,7 +5,10 @@ config.py
 *.json
 
 # HTML output files
-output.html
+output*.html
+
+# personal chart generator
+src/my_chart_generator.py
 
 # Python cache
 __pycache__

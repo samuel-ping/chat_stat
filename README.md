@@ -43,4 +43,4 @@ $ pip install -r requirements.txt
 
 ## How to Use
 
-(To be continued)
+To download Facebook Messenger chat history, go to https://www.facebook.com/dyi and request a copy of your messages in JSON format. It can take several hours before you can download your data.
