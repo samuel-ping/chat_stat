@@ -1,24 +1,24 @@
 {
   "participants": [
     {
-      "name": "Barthomolew"
+      "name": "Bartholomew"
     },
     {
-      "name": "Samuel Ping"
+      "name": "Samuel"
     }
   ],
   "messages": [
     {
-      "sender_name": "Samuel Ping",
+      "sender_name": "Samuel",
       "timestamp_ms": 1601132854970,
       "content": "Hey Bartholomew! How's it going?",
       "type": "Generic"
     },
     {
-      "sender_name": "Samuel Ping",
+      "sender_name": "Samuel",
       "timestamp_ms": 1601131519581,
-      "content": "Bb",
-      "type": "Poop! We haven't talked since high school. How's school tennis going? How's everything going?"
+      "content": "Poop! We haven't talked since high school. How's school tennis going? How's everything going?",
+      "type": "Generic"
     },
     {
       "sender_name": "Bartholomew",
