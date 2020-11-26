@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/samuel-ping/chat_stat/blob/main/screenshots/chat_stat-header-color.png?raw=true">
+  <img src="https://github.com/samuel-ping/chat_stat/blob/main/screenshots/chat_stat-header-color-cropped.png?raw=true">
 </p>
 
 # chat_stat
